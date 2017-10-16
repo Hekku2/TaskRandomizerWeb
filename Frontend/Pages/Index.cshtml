@@ -1,0 +1,17 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+@section PageContentScripts {
+    <script type="text/javascript">
+        var page = new BasePage();
+        page.dataLoaded();
+        ko.applyBindings(page);
+    </script>
+}
+
+<div class="row">
+
+</div>

@@ -1,0 +1,20 @@
+﻿@page "{id:long}"
+@model Frontend.Pages.Game.DetailsModel
+@{
+    ViewData["Title"] = "Game Details";
+}
+
+@section PageContentScripts {
+    <script type="text/javascript">
+        ko.applyBindings(new GameDetailsPage(@Model.Id));
+    </script>
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form data-bind="with: model">
+    <div class="form-group">
+        <label>Name</label>
+        <p class="form-control-static" data-bind="text: name"></p>
+    </div>
+</form>
