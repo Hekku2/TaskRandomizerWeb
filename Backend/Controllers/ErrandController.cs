@@ -17,10 +17,12 @@ namespace Backend.Controllers
     public class ErrandController : Controller
     {
         private readonly IErrandStorage _taskStorage;
+        private readonly IGameErrandStorage _gameErrandStorage;
 
-        public ErrandController(IErrandStorage taskStorage)
+        public ErrandController(IErrandStorage taskStorage, IGameErrandStorage gameErrandStorage)
         {
             _taskStorage = taskStorage;
+            _gameErrandStorage = gameErrandStorage;
         }
         
         /// <summary>
@@ -31,6 +33,16 @@ namespace Backend.Controllers
         public IEnumerable<ErrandModel> GetAll()
         {
             return _taskStorage.GetAll().Select(CreateTaskModel).ToList();
+        }
+
+        /// <summary>
+        /// Errands for game
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("game/{gameId}")]
+        public IEnumerable<ErrandModel> GetForGame(long gameId)
+        {
+            return _gameErrandStorage.GetForGame(gameId).Select(CreateTaskModel).ToList();
         }
 
         /// <summary>

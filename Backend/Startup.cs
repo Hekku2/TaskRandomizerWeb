@@ -33,8 +33,10 @@ namespace Backend
                     })
                 );
 
-            services.AddSingleton<IErrandStorage, ErrandStorage>();
-            services.AddSingleton<IGameStorage, GameStorage>();
+            var mockStorage = new MockStorage();
+            services.AddSingleton<IErrandStorage>((s) => mockStorage);
+            services.AddSingleton<IGameStorage>((s) => mockStorage);
+            services.AddSingleton<IGameErrandStorage>((s) => mockStorage);
             services.AddMvc();
         }
 

@@ -17,4 +17,17 @@
         <label>Name</label>
         <p class="form-control-static" data-bind="text: name"></p>
     </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: errands">
+            <tr>
+                <td data-bind="text: description"></td>
+            </tr>
+        </tbody>
+    </table>
 </form>
