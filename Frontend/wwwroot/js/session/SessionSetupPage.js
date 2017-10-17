@@ -28,6 +28,8 @@
         if (game) {
             self.errandList.startLoading();
             getErrands(game.id()).then(self.errandList.setErrands);
+        } else {
+            self.errandList.isInitialized(false);
         }
     }
 
