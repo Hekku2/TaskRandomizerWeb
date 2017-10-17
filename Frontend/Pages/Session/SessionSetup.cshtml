@@ -1,0 +1,53 @@
+﻿@page
+@model Frontend.Pages.Session.SessionSetupModel
+@{
+    ViewData["Title"] = "Game session setup";
+}
+
+@section PageContentScripts {
+    <script type="text/javascript">
+        ko.applyBindings(new SessionSetupPage());
+    </script>
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="well-sm">From this page you can start a new game session.</div>
+
+<form>
+    <select class="form-control" data-bind="options: games, optionsText: 'name', value: selectedGame, optionsCaption: 'Choose a game'"></select>
+        <div class="progress" data-bind="visible: gameLoading">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+        </div>
+    </div>
+
+    <br />
+
+    <!-- ko if not: gameLoading -->
+    <div class="form-group">
+        <label>Errands</label>
+        <!-- ko with: selectedGame -->
+        <ol data-bind="foreach: errands">
+            <li data-bind="text: description"></li>
+        </ol>
+        <!-- /ko -->
+    </div>
+
+    <div class="form-group">
+        <label>Players</label>
+        <button class="btn btn-success" data-bind="click: addPlayer">+</button>
+
+        <!-- ko foreach: players -->
+        <div class="input-group">
+            <input type="text" class="form-control" data-bind="textInput: name">
+            <span class="input-group-btn">
+                <button class="btn btn-danger" type="button" data-bind="$paren.removePlayer">X</button>
+            </span>
+        </div>
+        <!-- /ko-->
+    </div>
+
+    <!-- /ko -->
+
+    <button class="btn btn-primary btn-lg" data-bind="click: startGame, enable: gameSetupReady">Start game</button>
+</form>
