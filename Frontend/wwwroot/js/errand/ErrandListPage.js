@@ -6,7 +6,7 @@
     
     function setValues(data) {
         var items = _.map(data, function (item) {
-            return new ErrandListModel(item);
+            return new ErrandModel(item);
         });
         self.errands(items);
     }

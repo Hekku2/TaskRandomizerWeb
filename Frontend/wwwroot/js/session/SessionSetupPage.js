@@ -5,9 +5,7 @@
     self.games = ko.observableArray();
     self.selectedGame = ko.observable();
     self.selectedGame.subscribe(gameSelected);
-
-    self.gameLoading = ko.observable(false);
-
+    self.errandList = new ErrandListModel();
     self.players = ko.observableArray();
 
     self.addPlayer = function () {
@@ -28,12 +26,9 @@
 
     function gameSelected(game) {
         if (game) {
-            getErrands(game.id()).then(game.setErrands).always(gameLoaded);
+            self.errandList.startLoading();
+            getErrands(game.id()).then(self.errandList.setErrands);
         }
-    }
-
-    function gameLoaded() {
-        self.gameLoading(false);
     }
 
     function setGames(data) {
@@ -51,7 +46,6 @@
     }
 
     function getErrands(gameId) {
-        self.gameLoading(true);
         return $.getJSON(window.BACKENDURL + 'errand/game/' + gameId);
     }
 

@@ -16,24 +16,26 @@
 
 <form>
     <select class="form-control" data-bind="options: games, optionsText: 'name', value: selectedGame, optionsCaption: 'Choose a game'"></select>
-        <div class="progress" data-bind="visible: gameLoading">
+
+    <!-- ko with: errandList -->
+    <div class="progress" data-bind="visible: showLoading">
         <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
         </div>
     </div>
 
     <br />
-
-    <!-- ko if not: gameLoading -->
+        
+    <!-- ko if: isInitialized -->
     <div class="form-group">
         <label>Errands</label>
-        <!-- ko with: selectedGame -->
         <ol data-bind="foreach: errands">
             <li data-bind="text: description"></li>
         </ol>
-        <!-- /ko -->
     </div>
+    <!-- /ko -->
+    <!-- /ko -->
 
-    <div class="form-group">
+    <div class="form-group" data-bind="visible: errandList.isInitialized">
         <label>Players</label>
         <button class="btn btn-success" data-bind="click: addPlayer">+</button>
 
@@ -46,8 +48,6 @@
         </div>
         <!-- /ko-->
     </div>
-
-    <!-- /ko -->
 
     <button class="btn btn-primary btn-lg" data-bind="click: startGame, enable: gameSetupReady">Start game</button>
 </form>
