@@ -1,12 +1,10 @@
 ﻿using Backend.Models;
 using DataStorage.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using Optional.Unsafe;
 using Optional.Linq;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using DataStorage.DataObjects;
 
 namespace Backend.Controllers
@@ -45,7 +43,8 @@ namespace Backend.Controllers
             {
                 Id = session.Id,
                 GameName = session.GameName,
-                Errands = session.Errands.Select(CreateErrandModel).ToArray()
+                Errands = session.Errands.Select(CreateErrandModel).ToArray(),
+                Players =session.Players.Select(p => p).ToArray()
             };
         }
 
@@ -75,6 +74,12 @@ namespace Backend.Controllers
             var errands = _gameErrandStorage.GetForGame(settings.GameId);
 
             return _gameSessionStorage.CreateSession(game, errands).ToString();   
+        }
+
+        [HttpPost("join")]
+        public void JoinSession(SessionJoinModel joinParameters)
+        {
+            _gameSessionStorage.JoinSession(joinParameters.SessionId, joinParameters.PlayerName);
         }
     }
 }

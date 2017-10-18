@@ -55,6 +55,12 @@ namespace BackendUnitTests.Controllers
                 Assert.AreEqual(item.GameName, match.GameName);
                 Assert.NotNull(match.Errands);
                 Assert.AreEqual(item.Errands.Count, match.Errands.Count());
+                Assert.NotNull(match.Players);
+                Assert.AreEqual(item.Players.Count, match.Players.Count());
+                foreach (var player in item.Players)
+                {
+                    Assert.IsTrue(match.Players.Any(pl => pl == player));
+                }
             }
         }
 
@@ -64,6 +70,7 @@ namespace BackendUnitTests.Controllers
             {
                 Id = Guid.NewGuid(),
                 GameName = "name of the game " + index,
+                Players = Enumerable.Range(1, index).Select(j => $"Player {index} {j}").ToList(),
                 Errands = Enumerable.Range(1, index).Select(CreateErrand).ToList()
             };
         }
@@ -111,6 +118,23 @@ namespace BackendUnitTests.Controllers
             };
             var ex = Assert.Throws<OptionValueMissingException>(() => Controller.StartSession(settings));
             Assert.AreEqual("No game exists with ID 666", ex.Message);
+        }
+
+        #endregion
+
+        #region JoinSession
+
+        [Test]
+        public void Test_JoinSession_JoinsSession()
+        {
+            var join = new SessionJoinModel
+            {
+                SessionId = Guid.NewGuid(),
+                PlayerName = "player player"
+            };
+            Controller.JoinSession(join);
+
+            _mockGameSessionStorage.Received().JoinSession(join.SessionId, join.PlayerName);
         }
 
         #endregion

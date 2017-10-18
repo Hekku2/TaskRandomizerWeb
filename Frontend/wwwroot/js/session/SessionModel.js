@@ -4,6 +4,7 @@
     self.gameName = ko.observable();
 
     self.errands = ko.observableArray();
+    self.players = ko.observableArray();
 
     self.setValues = function (data) {
         self.id(data.id);
@@ -12,5 +13,6 @@
             return new GameErrandModel(item);
         });
         self.errands(items);
+        self.players(data.players);
     };
 }

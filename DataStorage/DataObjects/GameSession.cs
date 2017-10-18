@@ -10,5 +10,7 @@ namespace DataStorage.DataObjects
         public string GameName { get; set; }
 
         public List<Errand> Errands { get; set; }
+
+        public List<string> Players { get; set; }
     }
 }

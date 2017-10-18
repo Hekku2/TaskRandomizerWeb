@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using DataStorage.DataObjects;
 using System.Linq;
+using Optional;
+using Optional.Unsafe;
 
 namespace DataStorage.Implementations
 {
@@ -16,7 +18,8 @@ namespace DataStorage.Implementations
             {
                 Id = Guid.NewGuid(),
                 GameName = game.Name,
-                Errands = errands.Select(CreateErrandCopy).ToList()
+                Errands = errands.Select(CreateErrandCopy).ToList(),
+                Players = new List<string>()
             };
             _sessions.Add(session);
             return session.Id;
@@ -34,6 +37,15 @@ namespace DataStorage.Implementations
         public IEnumerable<GameSession> GetAll()
         {
             return _sessions.ToList();
+        }
+
+        public void JoinSession(Guid sessionId, string playerName)
+        {
+            var session = _sessions
+                .FirstOrDefault(s => s.Id == sessionId)
+                .SomeNotNull()
+                .ValueOrFailure($"No session found with ID {sessionId}"); ;
+            session.Players.Add(playerName);
         }
     }
 }
