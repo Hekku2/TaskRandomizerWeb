@@ -4,6 +4,8 @@ using DataStorage.DataObjects;
 using NUnit.Framework;
 using NSubstitute;
 using System.Linq;
+using Optional;
+using Optional.Unsafe;
 
 namespace BackendUnitTests.Controllers
 {
@@ -16,6 +18,16 @@ namespace BackendUnitTests.Controllers
         {
             _gameStorage = Substitute.For<IGameStorage>();
             Controller = new GameController(_gameStorage);
+        }
+
+        #region GetAll
+
+        [Test]
+        public void Test_GetAll_ReturnsNothingIfThereAreNoGames()
+        {
+            var result = Controller.GetAll();
+            Assert.NotNull(result);
+            Assert.IsFalse(result.Any());
         }
 
         [Test]
@@ -41,5 +53,34 @@ namespace BackendUnitTests.Controllers
                         actual.Name == item.Name));
             }
         }
+
+        #endregion
+
+        #region GetSingle
+
+        [Test]
+        public void Test_GetSingle_ReturnsCorrectItem()
+        {
+            var item = new Game
+            {
+                Id = 123,
+                Name = "Name of the game"
+            };
+            _gameStorage.GetSingle(item.Id).Returns(item.Some());
+
+            var result = Controller.GetSingle(item.Id);
+            Assert.NotNull(result);
+
+            Assert.AreEqual(item.Id, result.Id);
+            Assert.AreEqual(item.Name, result.Name);
+        }
+
+        [Test]
+        public void Test_GetSingle_ThrowsOptionValueMissingExceptionWhenItemsIsNotFound()
+        {
+            Assert.Throws<OptionValueMissingException>(() => Controller.GetSingle(123));
+        }
+
+        #endregion
     }
 }
