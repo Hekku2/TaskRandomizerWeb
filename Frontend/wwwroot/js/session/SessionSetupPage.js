@@ -6,22 +6,14 @@
     self.selectedGame = ko.observable();
     self.selectedGame.subscribe(gameSelected);
     self.errandList = new ErrandListModel();
-    self.players = ko.observableArray();
-
-    self.addPlayer = function () {
-        self.players.push(new PlayerModel());
-    };
-
-    self.removePlayer = function (item) {
-        self.players.remove(item);
-    };
 
     self.startGame = function () {
-
+        //Create session
+        //Navigate to lobby
     };
 
     self.gameSetupReady = ko.computed(function (){
-        return self.selectedGame() && self.selectedGame().errands().length > 0 && self.players().length > 0;
+        return self.selectedGame() && self.errandList.errands().length > 0;
     });
 
     function gameSelected(game) {
