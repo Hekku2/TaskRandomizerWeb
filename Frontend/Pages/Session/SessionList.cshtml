@@ -1,0 +1,28 @@
+﻿@page
+@model Frontend.Pages.Session.SessionListModel
+@{
+    ViewData["Title"] = "Sessions";
+}
+
+@section PageContentScripts {
+    <script type="text/javascript">
+        ko.applyBindings(new SessionListPage());
+    </script>
+}
+
+<div class="well-sm">This page lists all sessions.</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Game</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: sessions">
+        <tr>
+            <td data-bind="text: id"></td>
+            <td data-bind="text: gameName"></td>
+        </tr>
+    </tbody>
+</table>

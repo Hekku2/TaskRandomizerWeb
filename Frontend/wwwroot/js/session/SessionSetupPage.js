@@ -8,11 +8,18 @@
     self.errandList = new ErrandListModel();
 
     self.startGame = function () {
-        //Create session
-        //Navigate to lobby
+        function redirectToLobby(result)
+        {
+            console.log(result);
+        }
+
+        var settings = {
+            gameId: self.selectedGame().id()
+        };
+        $.post(window.BACKENDURL + 'gamesession/start', settings).then(redirectToLobby);
     };
 
-    self.gameSetupReady = ko.computed(function (){
+    self.gameSetupReady = ko.computed(function () {
         return self.selectedGame() && self.errandList.errands().length > 0;
     });
 
