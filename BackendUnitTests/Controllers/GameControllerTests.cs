@@ -12,12 +12,12 @@ namespace BackendUnitTests.Controllers
     [TestFixture]
     public class GameControllerTests : BaseControllerTests<GameController>
     {
-        private IGameStorage _gameStorage;
+        private IGameStorage _mockGameStorage;
 
         protected override void OnSetup()
         {
-            _gameStorage = Substitute.For<IGameStorage>();
-            Controller = new GameController(_gameStorage);
+            _mockGameStorage = Substitute.For<IGameStorage>();
+            Controller = new GameController(_mockGameStorage);
         }
 
         #region GetAll
@@ -38,7 +38,7 @@ namespace BackendUnitTests.Controllers
                 Id = i,
                 Name = "game " + i
             }).ToList();
-            _gameStorage.GetAll().Returns(items);
+            _mockGameStorage.GetAll().Returns(items);
 
             var result = Controller.GetAll();
             Assert.NotNull(result);
@@ -66,7 +66,7 @@ namespace BackendUnitTests.Controllers
                 Id = 123,
                 Name = "Name of the game"
             };
-            _gameStorage.GetSingle(item.Id).Returns(item.Some());
+            _mockGameStorage.GetSingle(item.Id).Returns(item.Some());
 
             var result = Controller.GetSingle(item.Id);
             Assert.NotNull(result);
