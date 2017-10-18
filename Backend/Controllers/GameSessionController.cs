@@ -47,10 +47,12 @@ namespace Backend.Controllers
         }
 
         /// <summary>
-        /// Starts a 
+        /// Starts a game session with given settings.
+        /// 
+        /// Starting fails if given game doesn't exist.
         /// </summary>
-        /// <param name="settings"></param>
-        /// <returns></returns>
+        /// <param name="settings">Session settings</param>
+        /// <returns>ID of created session. Can be used for navigating to session.</returns>
         [HttpPost("start")]
         public string StartSession(SessionSettingsModel settings)
         {
