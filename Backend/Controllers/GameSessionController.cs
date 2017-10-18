@@ -20,11 +20,13 @@ namespace Backend.Controllers
     {
         private readonly IGameSessionStorage _gameSessionStorage;
         private readonly IGameStorage _gameStorage;
+        private readonly IGameErrandStorage _gameErrandStorage;
 
-        public GameSessionController(IGameSessionStorage gameSessionStorage, IGameStorage gameStorage)
+        public GameSessionController(IGameSessionStorage gameSessionStorage, IGameStorage gameStorage, IGameErrandStorage gameErrandStorage)
         {
             _gameSessionStorage = gameSessionStorage;
             _gameStorage = gameStorage;
+            _gameErrandStorage = gameErrandStorage;
         }
 
         /// <summary>
@@ -42,7 +44,17 @@ namespace Backend.Controllers
             return new GameSessionModel
             {
                 Id = session.Id,
-                GameName = session.GameName
+                GameName = session.GameName,
+                Errands = session.Errands.Select(CreateErrandModel).ToArray()
+            };
+        }
+
+        private ErrandModel CreateErrandModel(Errand errand)
+        {
+            return new ErrandModel
+            {
+                Id = errand.Id,
+                Description = errand.Description
             };
         }
 
@@ -60,7 +72,9 @@ namespace Backend.Controllers
                 .GetSingle(settings.GameId)
                 .ValueOrFailure($"No game exists with ID {settings.GameId}");
 
-            return _gameSessionStorage.CreateSession(game, new List<Errand>()).ToString();   
+            var errands = _gameErrandStorage.GetForGame(settings.GameId);
+
+            return _gameSessionStorage.CreateSession(game, errands).ToString();   
         }
     }
 }

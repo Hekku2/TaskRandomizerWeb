@@ -15,10 +15,20 @@ namespace DataStorage.Implementations
             var session = new GameSession
             {
                 Id = Guid.NewGuid(),
-                GameName = game.Name
+                GameName = game.Name,
+                Errands = errands.Select(CreateErrandCopy).ToList()
             };
             _sessions.Add(session);
             return session.Id;
+        }
+
+        private Errand CreateErrandCopy(Errand source)
+        {
+            return new Errand
+            {
+                Id = source.Id,
+                Description = source.Description
+            };
         }
 
         public IEnumerable<GameSession> GetAll()

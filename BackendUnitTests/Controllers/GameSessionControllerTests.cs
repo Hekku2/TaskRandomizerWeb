@@ -17,12 +17,14 @@ namespace BackendUnitTests.Controllers
     {
         private IGameSessionStorage _mockGameSessionStorage;
         private IGameStorage _mockGameStorage;
+        private IGameErrandStorage _mockGameErrandStorage;
 
         protected override void OnSetup()
         {
             _mockGameSessionStorage = Substitute.For<IGameSessionStorage>();
             _mockGameStorage = Substitute.For<IGameStorage>();
-            Controller = new GameSessionController(_mockGameSessionStorage, _mockGameStorage);
+            _mockGameErrandStorage = Substitute.For<IGameErrandStorage>();
+            Controller = new GameSessionController(_mockGameSessionStorage, _mockGameStorage, _mockGameErrandStorage);
         }
 
         #region GetAll
@@ -38,11 +40,7 @@ namespace BackendUnitTests.Controllers
         [Test]
         public void Test_GetAll_ReturnsAllGames()
         {
-            var items = Enumerable.Range(1, 20).Select(i => new GameSession
-            {
-                Id = Guid.NewGuid(),
-                GameName = "name of the game " + i
-            }).ToList();
+            var items = Enumerable.Range(1, 20).Select(CreateSession).ToList();
             _mockGameSessionStorage.GetAll().Returns(items);
 
             var result = Controller.GetAll();
@@ -52,16 +50,37 @@ namespace BackendUnitTests.Controllers
 
             foreach (var item in items)
             {
-                Assert.IsTrue(
-                    result.Any(actual =>
-                        actual.Id == item.Id &&
-                        actual.GameName == item.GameName));
+                var match = result.FirstOrDefault(r => r.Id == item.Id);
+                Assert.NotNull(match);
+                Assert.AreEqual(item.GameName, match.GameName);
+                Assert.NotNull(match.Errands);
+                Assert.AreEqual(item.Errands.Count, match.Errands.Count());
             }
+        }
+
+        private GameSession CreateSession(int index)
+        {
+            return new GameSession
+            {
+                Id = Guid.NewGuid(),
+                GameName = "name of the game " + index,
+                Errands = Enumerable.Range(1, index).Select(CreateErrand).ToList()
+            };
+        }
+
+        private Errand CreateErrand(int id)
+        {
+            return new Errand
+            {
+                Id = id,
+                Description = "errand " + id
+            };
         }
 
         #endregion
 
         #region StartSession
+
         [Test]
         public void Test_StartSession_ReturnsIdForSession()
         {
@@ -73,8 +92,11 @@ namespace BackendUnitTests.Controllers
             var game = new Game() { Id = settings.GameId };
             _mockGameStorage.GetSingle(game.Id).Returns(game.Some());
 
+            var errands = Enumerable.Range(1, 6).Select(i => new Errand { Id = i, Description = "Errand " + i});
+            _mockGameErrandStorage.GetForGame(game.Id).Returns(errands);
+
             var guid = Guid.NewGuid();
-            _mockGameSessionStorage.CreateSession(game, Arg.Any<IEnumerable<Errand>>()).Returns(guid);
+            _mockGameSessionStorage.CreateSession(game, errands).Returns(guid);
 
             var result = Controller.StartSession(settings);
             Assert.AreEqual(guid.ToString(), result);

@@ -6,5 +6,6 @@ namespace Backend.Models
     {
         public Guid Id { get; set; }
         public string GameName { get; set; }
+        public ErrandModel[] Errands { get; set; }
     }
 }
