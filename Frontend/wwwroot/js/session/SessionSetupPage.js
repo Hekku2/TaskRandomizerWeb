@@ -31,7 +31,7 @@
 
     function createGameModel(item) {
         var model = new GameModel();
-        model.setValues(item)
+        model.setValues(item);
         return model;
     }
 
