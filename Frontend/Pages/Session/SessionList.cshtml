@@ -13,18 +13,13 @@
 <div class="well-sm">This page lists all sessions.</div>
 
 <form>
-    <div class="form-group">
-        <label>Player name</label>
-        <input class="form-control" type="text" data-bind="textInput: playerName" />
-    </div>
-
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Game</th>
                 <th>Errands</th>
                 <th>Players</th>
-                <th></th>
+                <th class="col-md-2"></th>
             </tr>
         </thead>
         <tbody data-bind="foreach: sessions">
@@ -33,7 +28,7 @@
                 <td data-bind="text: errands().length"></td>
                 <td data-bind="text: players().length"></td>
                 <td>
-                    <button class="btn btn-primary" data-bind="click: $parent.joinSession">Join</button>
+                    <a class="btn btn-block btn-primary" data-bind="attr: {href:'Lobby/?id='+ id()}">Go to lobby</a>
                 </td>
             </tr>
         </tbody>

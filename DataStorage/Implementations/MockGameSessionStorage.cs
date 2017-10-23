@@ -47,5 +47,10 @@ namespace DataStorage.Implementations
                 .ValueOrFailure($"No session found with ID {sessionId}"); ;
             session.Players.Add(playerName);
         }
+
+        public Option<GameSession> GetSingle(Guid id)
+        {
+            return _sessions.FirstOrDefault(session => session.Id == id).SomeNotNull();
+        }
     }
 }

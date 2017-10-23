@@ -86,6 +86,35 @@ namespace BackendUnitTests.Controllers
 
         #endregion
 
+        #region GetSingle
+
+        [Test]
+        public void Test_GetSingle_ReturnsCorrectItem()
+        {
+            var item = new GameSession
+            {
+                Id = Guid.NewGuid(),
+                GameName = "Name of game",
+                Errands = new List<Errand>(),
+                Players = new List<string>()
+            };
+            _mockGameSessionStorage.GetSingle(item.Id).Returns(item.Some());
+
+            var result = Controller.GetSingle(item.Id);
+            Assert.NotNull(result);
+
+            Assert.AreEqual(item.Id, result.Id);
+            Assert.AreEqual(item.GameName, result.GameName);
+        }
+
+        [Test]
+        public void Test_GetSingle_ThrowsOptionValueMissingExceptionWhenItemsIsNotFound()
+        {
+            Assert.Throws<OptionValueMissingException>(() => Controller.GetSingle(Guid.NewGuid()));
+        }
+
+        #endregion
+
         #region StartSession
 
         [Test]

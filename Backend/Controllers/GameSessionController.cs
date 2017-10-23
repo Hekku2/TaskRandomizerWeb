@@ -6,6 +6,7 @@ using Optional.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using DataStorage.DataObjects;
+using System;
 
 namespace Backend.Controllers
 {
@@ -35,6 +36,15 @@ namespace Backend.Controllers
         public IEnumerable<GameSessionModel> GetAll()
         {
             return _gameSessionStorage.GetAll().Select(CreateGameSessionModel).ToList();
+        }
+
+        [HttpGet("{id}")]
+        public GameSessionModel GetSingle(Guid id)
+        {
+            return _gameSessionStorage
+                .GetSingle(id)
+                .Select(CreateGameSessionModel)
+                .ValueOrFailure($"No session exists with ID {id}");
         }
 
         private GameSessionModel CreateGameSessionModel(GameSession session)
