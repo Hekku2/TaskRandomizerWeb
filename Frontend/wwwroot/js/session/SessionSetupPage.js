@@ -10,7 +10,7 @@
     self.startGame = function () {
         function redirectToLobby(result)
         {
-            console.log(result);
+            window.location = 'Lobby/?id=' + result
         }
 
         var settings = {
