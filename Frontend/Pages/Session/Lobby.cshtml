@@ -21,4 +21,12 @@
     <ul data-bind="foreach: players">
         <li data-bind="text: name"></li>
     </ul>
+
+    
 </form>
+
+<label>Events</label>
+<!-- TODO: This should actually display different information depending on event type.-->
+<ul data-bind="foreach: events">
+    <li data-bind="text: eventType"></li>
+</ul>
