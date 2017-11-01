@@ -5,6 +5,19 @@
     self.session = new SessionModel();
     self.events = ko.observableArray();
 
+    self.playerName = ko.observable();
+    self.join = function () {
+        function redirectToLobby(result) {
+            window.location = '/Session/LiveSession/?sessionId=' + sessionId + '&playerName=' + self.playerName()
+        }
+
+        var settings = {
+            SessionId: sessionId,
+            PlayerName: self.playerName()
+        };
+        $.post(window.BACKENDURL + 'gamesession/join', settings).then(redirectToLobby);
+    };
+
     function getSession() {
         return $.getJSON(window.BACKENDURL + 'gameSession/' + sessionId);
     }

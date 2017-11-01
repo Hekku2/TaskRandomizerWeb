@@ -91,5 +91,14 @@ namespace Backend.Controllers
         {
             _gameSessionStorage.JoinSession(joinParameters.SessionId, joinParameters.PlayerName);
         }
+
+        [HttpPost("popErrand")]
+        public ErrandModel PopErrand(SessionContextModel parameters)
+        {
+            return new ErrandModel
+            {
+                Description = "this is errand"
+            };
+        }
     }
 }

@@ -5,6 +5,7 @@ using DataStorage.DataObjects;
 using System.Linq;
 using Optional;
 using Optional.Unsafe;
+using DataStorage.DataObjects.Events;
 
 namespace DataStorage.Implementations
 {
@@ -15,7 +16,7 @@ namespace DataStorage.Implementations
     /// </summary>
     public class MockGameSessionStorage : IGameSessionStorage, IGameSessionEventStorage
     {
-        private readonly Dictionary<Guid, List<EventType>> _gameSessionEvents = new Dictionary<Guid, List<EventType>>();
+        private readonly Dictionary<Guid, List<Event>> _gameSessionEvents = new Dictionary<Guid, List<Event>>();
         private readonly List<GameSession> _sessions = new List<GameSession>();
 
         public Guid CreateSession(Game game, IEnumerable<Errand> errands)
@@ -28,7 +29,7 @@ namespace DataStorage.Implementations
                 Players = new List<string>()
             };
             _sessions.Add(session);
-            AddEvent(session.Id, EventType.SessionCreated);
+            AddEvent(session.Id, new Event(session.Id, EventType.SessionCreated));
             return session.Id;
         }
 
@@ -53,6 +54,7 @@ namespace DataStorage.Implementations
                 .SomeNotNull()
                 .ValueOrFailure($"No session found with ID {sessionId}"); ;
             session.Players.Add(playerName);
+            AddEvent(session.Id, new PlayerJoinedEvent(sessionId, playerName));
         }
 
         public Option<GameSession> GetSingle(Guid id)
@@ -60,7 +62,7 @@ namespace DataStorage.Implementations
             return _sessions.FirstOrDefault(session => session.Id == id).SomeNotNull();
         }
 
-        public List<EventType> GetEvents(Guid sessionId)
+        public List<Event> GetEvents(Guid sessionId)
         {
             try
             {
@@ -68,11 +70,11 @@ namespace DataStorage.Implementations
             }
             catch (Exception)
             {
-                return new List<EventType>();
+                return new List<Event>();
             }
         }
 
-        public void AddEvent(Guid sessionId, EventType sessionEvent)
+        public void AddEvent(Guid sessionId, Event sessionEvent)
         {
             try
             {
@@ -80,7 +82,7 @@ namespace DataStorage.Implementations
             }
             catch (Exception)
             {
-                _gameSessionEvents[sessionId] = new List<EventType>();
+                _gameSessionEvents[sessionId] = new List<Event>();
                 _gameSessionEvents[sessionId].Add(sessionEvent);
             }
         }

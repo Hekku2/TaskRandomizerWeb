@@ -3,6 +3,6 @@
     self.eventType = ko.observable();
 
     self.setValues = function (data) {
-        self.eventType(data);
+        self.eventType(data.eventType);
     }
 }
