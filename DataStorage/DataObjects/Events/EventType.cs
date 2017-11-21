@@ -4,6 +4,7 @@
     {
         None = 0,
         SessionCreated,
-        PlayerJoined
+        PlayerJoined,
+        ErrandPopped
     }
 }

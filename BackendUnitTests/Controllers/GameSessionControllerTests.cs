@@ -18,13 +18,15 @@ namespace BackendUnitTests.Controllers
         private IGameSessionStorage _mockGameSessionStorage;
         private IGameStorage _mockGameStorage;
         private IGameErrandStorage _mockGameErrandStorage;
+        private IGameSessionErrandStorage _mockGameSessionErrandStorage;
 
         protected override void OnSetup()
         {
             _mockGameSessionStorage = Substitute.For<IGameSessionStorage>();
             _mockGameStorage = Substitute.For<IGameStorage>();
             _mockGameErrandStorage = Substitute.For<IGameErrandStorage>();
-            Controller = new GameSessionController(_mockGameSessionStorage, _mockGameStorage, _mockGameErrandStorage);
+            _mockGameSessionErrandStorage = Substitute.For<IGameSessionErrandStorage>();
+            Controller = new GameSessionController(_mockGameSessionStorage, _mockGameStorage, _mockGameErrandStorage, _mockGameSessionErrandStorage);
         }
 
         #region GetAll

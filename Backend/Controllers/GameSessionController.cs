@@ -20,12 +20,14 @@ namespace Backend.Controllers
         private readonly IGameSessionStorage _gameSessionStorage;
         private readonly IGameStorage _gameStorage;
         private readonly IGameErrandStorage _gameErrandStorage;
+        private readonly IGameSessionErrandStorage _gameSessionErrandStorage;
 
-        public GameSessionController(IGameSessionStorage gameSessionStorage, IGameStorage gameStorage, IGameErrandStorage gameErrandStorage)
+        public GameSessionController(IGameSessionStorage gameSessionStorage, IGameStorage gameStorage, IGameErrandStorage gameErrandStorage, IGameSessionErrandStorage gameSessionErrandStorage)
         {
             _gameSessionStorage = gameSessionStorage;
             _gameStorage = gameStorage;
             _gameErrandStorage = gameErrandStorage;
+            _gameSessionErrandStorage = gameSessionErrandStorage;
         }
 
         /// <summary>
@@ -100,9 +102,14 @@ namespace Backend.Controllers
         [HttpPost("popErrand")]
         public ErrandModel PopErrand(SessionContextModel parameters)
         {
+            var errand = _gameSessionErrandStorage
+                .PopErrand(parameters.SessionId)
+                .ValueOrFailure($"No errands for session with ID {parameters.SessionId}");
+
             return new ErrandModel
             {
-                Description = "this is errand"
+                Id = errand.Id,
+                Description = errand.Description
             };
         }
     }

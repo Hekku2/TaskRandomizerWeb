@@ -14,7 +14,7 @@ namespace DataStorage.Implementations
     /// 
     /// In actual implementation, somekind of service layer should probably handle event creation.
     /// </summary>
-    public class MockGameSessionStorage : IGameSessionStorage, IGameSessionEventStorage
+    public class MockGameSessionStorage : IGameSessionStorage, IGameSessionEventStorage, IGameSessionErrandStorage
     {
         private readonly Dictionary<Guid, List<Event>> _gameSessionEvents = new Dictionary<Guid, List<Event>>();
         private readonly List<GameSession> _sessions = new List<GameSession>();
@@ -52,7 +52,7 @@ namespace DataStorage.Implementations
             var session = _sessions
                 .FirstOrDefault(s => s.Id == sessionId)
                 .SomeNotNull()
-                .ValueOrFailure($"No session found with ID {sessionId}"); ;
+                .ValueOrFailure($"No session found with ID {sessionId}");
             session.Players.Add(playerName);
             AddEvent(session.Id, new PlayerJoinedEvent(sessionId, playerName));
         }
@@ -74,7 +74,7 @@ namespace DataStorage.Implementations
             }
         }
 
-        public void AddEvent(Guid sessionId, Event sessionEvent)
+        private void AddEvent(Guid sessionId, Event sessionEvent)
         {
             try
             {
@@ -85,6 +85,24 @@ namespace DataStorage.Implementations
                 _gameSessionEvents[sessionId] = new List<Event>();
                 _gameSessionEvents[sessionId].Add(sessionEvent);
             }
+        }
+
+        public Option<Errand> PopErrand(Guid sessionId)
+        {
+            var session = _sessions
+                .FirstOrDefault(s => s.Id == sessionId)
+                .SomeNotNull()
+                .ValueOrFailure($"No session found with ID {sessionId}");
+
+            //NOTE: Actual implemenation should be some stack-like implementation
+            var errand = session.Errands.FirstOrDefault();
+            if (errand != null)
+            {
+                session.Errands.RemoveAt(0);
+                AddEvent(sessionId, new ErrandPoppedEvent(sessionId, errand.Description));
+            }
+            
+            return errand.Some();
         }
     }
 }

@@ -40,6 +40,7 @@ namespace Backend
             services.AddSingleton<IGameErrandStorage>((s) => mockStorage);
             services.AddSingleton<IGameSessionStorage>((s) => mockGameSessionStorage);
             services.AddSingleton<IGameSessionEventStorage>((s) => mockGameSessionStorage);
+            services.AddSingleton<IGameSessionErrandStorage>((s) => mockGameSessionStorage);
             services.AddMvc();
         }
 
