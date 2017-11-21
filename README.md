@@ -5,3 +5,9 @@ Web implementation for Task Randomizer game.
  * asp.net core
  * ARM-templates
  * SignalR
+ 
+## Compiling
+dotnet build
+
+## Running tests
+dotnet test
