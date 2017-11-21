@@ -29,7 +29,7 @@ namespace DataStorage.Implementations
                 Players = new List<string>()
             };
             _sessions.Add(session);
-            AddEvent(session.Id, new Event(session.Id, EventType.SessionCreated));
+            AddEvent(session.Id, new Event(session.Id, EventType.SessionCreated, "Session created", "Session created"));
             return session.Id;
         }
 

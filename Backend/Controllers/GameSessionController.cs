@@ -54,7 +54,7 @@ namespace Backend.Controllers
                 Id = session.Id,
                 GameName = session.GameName,
                 Errands = session.Errands.Select(CreateErrandModel).ToArray(),
-                Players =session.Players.Select(p => p).ToArray()
+                Players = session.Players.Select(p => p).ToArray()
             };
         }
 
@@ -92,6 +92,11 @@ namespace Backend.Controllers
             _gameSessionStorage.JoinSession(joinParameters.SessionId, joinParameters.PlayerName);
         }
 
+        /// <summary>
+        /// Pops and returns errand for session
+        /// </summary>
+        /// <param name="parameters">session parameters</param>
+        /// <returns>Errand</returns>
         [HttpPost("popErrand")]
         public ErrandModel PopErrand(SessionContextModel parameters)
         {

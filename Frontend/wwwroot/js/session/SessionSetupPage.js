@@ -8,8 +8,7 @@
     self.errandList = new ErrandListModel();
 
     self.startGame = function () {
-        function redirectToLobby(result)
-        {
+        function redirectToLobby(result){
             window.location = 'Lobby/?id=' + result
         }
 
