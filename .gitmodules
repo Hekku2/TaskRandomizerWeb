@@ -1,0 +1,3 @@
+[submodule "task-randomizer-frontend"]
+	path = task-randomizer-frontend
+	url = https://github.com/Hekku2/task-randomizer-web-frontend.git
